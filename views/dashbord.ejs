@@ -1,0 +1,115 @@
+<%- include('head')%>
+<%if(locals.auth){%>
+   
+    <%-include('nav')%>
+    <%}else if(locals.auth===false){%>
+       
+        <%-include('nav2')%>
+        <%}%>
+        <div class="container-fluid">
+            <div class="row">
+<div class="col-lg-3 col-sm-6 col-md-6" style="background-color: rgb(32, 118, 204);">
+                <h4 class="text-center m-3 ">Top 5 Shorted Links</h4>
+        <table class="container mb-2" style="width:100%" id="t01">
+            <tr>
+            <th>Top Links</th>
+        </tr>     
+        <% toplinks.forEach(blog=>{%>
+            <tr>
+        <td onmousemove="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'"> <div class="blogsnippet"><%=blog.Shorturl%></div></td></tr>
+
+        <%})%></div>
+    </td>
+    </tr>
+    </table></div>
+    <div class="col-lg-9 col-sm-6 col-md-6" style="background: rgba(9, 101, 175, 0.938);">
+<div >
+        <div>
+    <br>
+    <div id="error"></div>
+    <p class=""> Shortlink here and see all details of that link
+    </p>
+    
+<form action="/details" method="POST">
+    <div class="input-group input-group-lg">
+        <span class="input-group-text" id="inputGroup-sizing-lg">Large</span>
+        <input type="text" name="Shorturl" id="Shorturl" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+      </div>
+<input type="submit" class="btn btn-danger mt-2 w-lg-25 w-sm-50 w-xl-25" >
+</form>
+</div>
+<br>
+<div name="details" id="details">
+    <div name="longurl" id="longurl" class="fs-4 text-success "></div>
+    <div name="shorturl" id="shorturl" class="fs-4 text-success"></div>
+    <div name="clicks" id="clicks" class="fs-4 text-success"></div>
+</div>
+</div></div></div>
+</div>
+<script>
+                 
+    const form = document.querySelector('form')
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+    const Shorturl = form.Shorturl.value
+    
+       
+        try {
+            const res = await fetch('/details',
+             {
+                body: JSON.stringify( {Shorturl} ),
+                headers: { 'Content-Type': 'application/json' },
+                method: "POST",
+            })
+            const data = await res.json();
+console.log(data)
+            
+             if(data.url){
+                let long=document.getElementById("longurl")
+                let short=document.getElementById("shorturl")
+                let click=document.getElementById("clicks")
+                console.log(long)
+                long.innerHTML=""
+                short.innerHTML=""
+                click.innerHTML=""
+                var longurl=document.createElement("p")
+            var text = document.createTextNode("Long url =>"+data.url.longurl);
+            longurl.appendChild(text);   
+            long.appendChild(longurl)
+           
+            var shorturl=document.createElement("p")
+            var text1= document.createTextNode("ShortUrl =>"+data.url.Shorturl);
+            shorturl.appendChild(text1)
+            short.appendChild(shorturl)
+          
+            var clicks=document.createElement("p")
+            var text2= document.createTextNode("Clicks =>"+data.url.clicks);
+            clicks.appendChild(text2)
+            click.appendChild(clicks)
+            
+            Shorturl=""
+    
+    }
+            else{
+            }
+            if(data.message)
+            {
+            var tag=document.createElement("p")
+            var text = document.createTextNode(data.message);
+            tag.appendChild(text);   
+            var error=document.getElementById('error')
+            error.innerHTML=""
+            error.style.background='red'
+                error.appendChild(tag)
+            }
+        
+     } 
+        catch (err) {
+            console.log(err)
+        }
+
+    })
+
+</script>
+
+<%-include('footer')%>

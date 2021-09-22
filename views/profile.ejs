@@ -1,0 +1,97 @@
+<%-include('head')%>
+<%if(locals.auth){%>
+   
+    <%-include('nav')%>
+    <%}else if(locals.auth===false){%>
+       
+        <%-include('nav2')%>
+        <%}%>
+        
+        <header id="login-container">
+            <div class="container pt-3 " >
+               <div class="row justify-content-center">
+                  
+              <div class="col-lg-8">
+               <div class="card shadow-lg border-5 rounded-lg mt-3 mb-3">
+               <div class="card-header justify-content-center bg-warning border border-dark border-2 shadow-lg" style="border-radius:50%" onmouseover="this.style.transition = '1s';this.style.transformStyle = 'preserve-3d';this.style.transform = 'rotateX(360deg)'" onmouseout="this.style.transition = '0s';this.style.transform = 'rotateX(0deg)'">
+                <h3 class="font-weight-light my-4 fs-2 text-dark" style="text-align: center;" >User Details</h3></div>
+                <div class="card-body">    <div id="success" style="background-color: rgb(31, 226, 194);"></div>
+            <form action="/auth/profile" method="POST" id="edited" >
+        <label for="name" class="fs-4">UserName</label>
+<div style="display: flex;">
+        <input type="text" value="<%=user%>" readonly class="form-control w-50" name='name' id="username" readOnly>
+    
+<button onclick="editName()" type="button" class="btn btn-warning mx-2 w-10 align-middle" style="width: 15%;" >Edit</button></div>
+<div name="usernameerror" class="usernameerror w-50 mt-2" id="usernameerror" style="display: block;"></div>
+
+<br>
+
+<label for="email" class="fs-4">Email Address</label>
+<div style="display: flex;">
+<input type="text" value="<%=email%>" readonly class="form-control w-50" name="email" id="email" readOnly > 
+<button onclick="editEmail()" type="button" class="btn btn-warning mx-2 w-10 align-middle" style="width: 15%;">Edit</button></div>
+<div name="emailerror" class="email error w-50 mt-2" id="emailerror" style="display: block;" ></div>
+
+  
+<br>
+
+<button value="submit" class="btn btn-warning w-lg-25 w-25 align-middle" onmouseover="this.style.background='black';this.style.color='white'" onmouseout="this.style.background='#ffc107';this.style.color='black'" style="width: 15%;">Save</button>  
+</form>  
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>  
+        <%-include('footer')%>
+ 
+<script>
+
+    function editName(){
+        document.getElementById("email").readOnly=true
+        document.getElementById("username").readOnly=false
+        document.getElementById("username").focus()
+    }
+    function editEmail(){
+        document.getElementById("username").readOnly=true
+        document.getElementById("email").readOnly=false
+        document.getElementById("email").focus()
+    }
+        var form=document.getElementById("edited")
+        const emailerror = document.getElementById('emailerror')
+        const usernameerror= document.getElementById('usernameerror')
+        console.log(form)
+        form.addEventListener("submit",async(e)=>{
+            let username=form.name.value
+            let email=form.email.value
+            e.preventDefault()
+            
+            usernameerror.textContent=''
+            emailerror.textContent = ''
+            
+            const res = await fetch('/auth/profile',
+                                        {
+                                            body: JSON.stringify({ username,email }),
+                                            headers: { 'Content-Type': 'application/json' },
+                                            method: "POST",
+                                        })
+                                    const data = await res.json();
+                                    console.log(data.error)
+                if(data.success){
+                    document.getElementById("success").innerHTML=data.success
+                    document.getElementById("success").style.backgroundColor="#0dfddc"
+                }
+                if (data.error) {
+                    document.getElementById("success").innerHTML=""
+                    if(data.error.username){
+                        usernameerror.style.background='pink'
+                        usernameerror.textContent = data.error.username
+                document.getElementById('username').focus()}
+                if(data.error.email){
+                    emailerror.style.background='pink'
+                emailerror.textContent = data.error.email
+                document.getElementById('email').focus()}}
+                
+        })
+</script>

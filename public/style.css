@@ -1,0 +1,30 @@
+.form-my{
+    width: auto;
+    background-color: rgb(248, 233, 14);
+    justify-content: center;
+    text-align: center;
+}
+input{
+    width:40% ;
+    padding: 1.005rem;
+}
+nav{
+    background-color: black;
+}
+.nav-item:hover{
+    background-color: rgb(201, 72, 13);
+    
+}
+.navbar-brand{
+    background-color: black;
+}
+.navbar-brand:hover{
+    background-color: rgba(48, 45, 44, 0.589);
+}
+/* .btn : hover{
+color: green;
+} */
+/* #login-container{rgb(248, 233, 14);
+    min-height: 100vh;
+    background-color:#14507C ;
+} */

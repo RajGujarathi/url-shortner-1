@@ -1,0 +1,16 @@
+{
+    "Customer": {
+      "dbConfig": {"db":"postgres",
+        "host": "localhost",
+        "port": 5432,
+        "dbName": "postgres",
+        "username":"postgres",
+        "password":123456
+
+      },
+      "url":"localhost:3001/"
+      
+    },
+    "secratekey":"zyxwvabcdefghiklmnop9876543210152832wqqaylmassdhg%&"
+
+  }

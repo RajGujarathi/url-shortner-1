@@ -1,0 +1,135 @@
+<%- include('head')%>
+    <%if(locals.auth){%>
+
+        <%-include('nav')%>
+            <%}else if(locals.auth===false){%>
+
+                <%-include('nav2')%>
+                    <%}%>
+                    <link rel="stylesheet" href="style.css">
+                     <div class="container-fluid " style="">
+                         <div class="row " ><div class="col-lg-6 col-sm-12  p-15 " style="background-color: #f8fafa;">
+                             <h3 class="mt-5 p-3"> Your URL links is too long for share ?</h3>
+                             <p class="mt-2 p-3" style="font-size: 22px;">In today's web world at some point long url are not able to share because it contains to many characters with some queries so, Let's Get started to create shorten links. </p>
+                            </div>
+                         <div class="col-lg-6 col-sm-12"><img src="../public/urlimage.jpg" alt="" style="width: 100%;"></div></div> </div> 
+<div class="container-fluid" >
+                    <div name="error" id="error" class="" ></div>
+
+                       <div id="long" name="long"> 
+                           <form action="/encode" method='POST' class="form-my " id="form">
+                            <h3>Type your Url</h3>
+                            <input type="text" id="longUrl" name="longUrl" class="longUrl" >  
+                            <br>
+                         <br>
+                            <button type="submit" class="btn btn-warning  fs-5 mb-2 border border-dark"  style="" id="submit" onclick="document.getElementById('error').innerHTML='';document.getElementById('error').classList=''"> <span style="color: rgb(7, 0, 4);" class="bold fs-5">Submit</span> </button>
+                            </form>
+                            <div id="short" class="form-my">
+
+                            </div>
+                        </div>
+     
+                    </div>
+            
+                      
+     <script>
+         function Copylink() {
+  /* Get the text field */
+  var type="http://"
+  var copyText = document.getElementById("shortlink");
+
+  /* Select the text field */
+  copyText.select();
+  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+  /* Copy the text inside the text field */
+  document.execCommand("copy");
+
+  /* Alert the copied text */
+  alert("Copied the text: " + copyText.value);
+}
+
+function moveto(){
+    document.getElementById("short").innerHTML=""
+    var longUrl=document.getElementById('longUrl')
+    longUrl.readOnly=false
+    longUrl.value=""
+    var submit=document.createElement("BUTTON")
+    submit.setAttribute('class',"btn btn-outline-dark text-danger bold fs-5 mb-2")
+    //submit.style.width=20%
+    //submit.style.fontWeight=600
+    submit.setAttribute('id',"submit")
+    var te=document.createTextNode("Submit")
+    submit.appendChild(te)
+    document.getElementById("form").appendChild(submit);
+}
+
+
+                            var message = document.getElementById('message')
+                        </script>
+                        <script>
+                            
+                            const form = document.querySelector('form')
+                            form.addEventListener('submit', async (e) => {
+                                e.preventDefault();
+                                const longUrl = form.longUrl.value
+                                //let short = form.shorten.value
+
+
+                                try {
+                                    const res = await fetch('/encode',
+                                        {
+                                            body: JSON.stringify({ longUrl }),
+                                            headers: { 'Content-Type': 'application/json' },
+                                            method: "POST",
+                                        })
+                                    const data = await res.json();
+                                    console.log(data)
+
+                                    if (data.some) {
+                                        document.getElementById("submit").remove()
+                                        document.getElementById('longUrl').readOnly=true
+                                        var h3=document.createElement("h3")
+                                        var title=document.createTextNode("Your Short link")
+                                        h3.appendChild(title)
+                                        var sho=document.getElementById('short')
+                                        var x = document.createElement("INPUT");
+                                        x.setAttribute("type", "text");
+                                        x.setAttribute('value',"http://"+data.some)
+                                        x.setAttribute("id","shortlink")
+                                        x.readOnly=true
+                                        var copy=document.createElement("BUTTON");
+                                        var copytext=document.createTextNode("Copy")
+                                        copy.style.display="block"
+                                        copy.style.margin="auto"
+                                        copy.setAttribute("class","btn btn-outline-dark text-danger bold fs-5 ")
+                                        copy.appendChild(copytext)
+                                        copy.addEventListener("click",Copylink)
+                                        var move=document.createElement("BUTTON");
+                                        var text=document.createTextNode("Short Another Link")
+                                        move.appendChild(text)
+                                        move.addEventListener("click",moveto)
+                                        sho.appendChild(h3)
+                                        sho.appendChild(x)
+                                        sho.appendChild(copy)
+                                        sho.appendChild(move)
+                                       // shorten.value = data.some
+                                    }
+                                    else if (data.error) {
+                                        var tag = document.createElement("p")
+                                        var text = document.createTextNode(data.error);
+                                        tag.appendChild(text);
+                                        var error = document.getElementById('error')
+                                        error.innerHTML=""
+                                        error.classList+="alert alert-danger p-3"
+                                        error.appendChild(tag)
+                                    }
+                                } catch (err) {
+                                    console.log(err)
+                                }
+
+                            })
+
+                        </script>
+                    
+                        <%-include('footer')%>

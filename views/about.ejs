@@ -1,0 +1,22 @@
+<%- include('head')%>
+    <%if(locals.auth){%>
+
+        <%-include('nav')%>
+            <%}else if(locals.auth===false){%>
+
+                <%-include('nav2')%>
+                    <%}%>
+                    <div class="container p-1">
+                        <h2 class="text-center p-1">About us</h2>
+                        <p class="p-4" style="font-size: 21px;">
+                         This URL Shortener Web application is to provide a service that is used to create short links from very long URLs.
+                          Usually, short links have the size of one third or even one-fourth of the original URL, which makes them easier to type,
+                           message, or tweeted. Also It saves a lot of space. Clicking on a short link user will be automatically redirected to the 
+                           original URL. Additionally,users are less likely to mistype shorter URLs.User is able to create its Account and manage its links and watch preview of that link.Short links are also helpful in Search engine optimization 
+                           (SEO) of google and link float on the top of google seach. A URL shortener assists in saving time and boosting marketing metrics.
+   
+             
+                        </p>
+                            </div>
+                      
+                    <%-include('footer')%>
